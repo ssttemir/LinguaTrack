@@ -1,0 +1,111 @@
+/* 🌸 Ana Tema Renkleri */
+:root {
+    --main-pink: #fce4ec;
+    --accent-pink: #f8bbd0;
+    --white: #ffffff;
+    --gray: #555;
+    --soft-shadow: rgba(0, 0, 0, 0.05);
+    --highlight: #ff80ab;
+    --matcha: #b2dfdb;
+}
+
+/* 🌼 Temel Stil */
+body {
+    background-color: var(--main-pink);
+    font-family: 'Segoe UI', sans-serif;
+    color: var(--gray);
+}
+
+/* 🍡 Kartlar ve kutular */
+.container, .card {
+    background-color: var(--white);
+    border-radius: 15px;
+    box-shadow: 0 5px 20px var(--soft-shadow);
+}
+
+/* 🎀 Başlıklar */
+h2, h3 {
+    color: var(--highlight);
+    font-weight: bold;
+}
+
+/* 💬 Form Elemanları */
+input, select, textarea {
+    border: 1px solid #eee;
+    border-radius: 10px;
+    padding: 0.6rem 1rem;
+    background-color: #fff;
+}
+
+input:focus, select:focus, textarea:focus {
+    border-color: var(--highlight);
+    box-shadow: 0 0 0 0.1rem var(--accent-pink);
+}
+
+/* 🍓 Butonlar */
+.btn-primary {
+    background-color: var(--highlight);
+    border-color: var(--highlight);
+    border-radius: 10px;
+    transition: 0.3s;
+}
+
+.btn-primary:hover {
+    background-color: var(--accent-pink);
+    border-color: var(--accent-pink);
+}
+
+/* 🍥 Etiketler */
+.badge-success {
+    background-color: #aed581;
+}
+.badge-warning {
+    background-color: #fff176;
+    color: #333;
+}
+.badge-danger {
+    background-color: #ef9a9a;
+}
+
+/* 📊 Progress bar */
+.progress {
+    height: 12px;
+    background-color: #f8bbd0;
+    border-radius: 20px;
+    overflow: hidden;
+}
+.progress-bar {
+    background-color: #f06292;
+    font-size: 0.75rem;
+}
+
+/* 🌸 Navbar */
+.navbar {
+    background: linear-gradient(to right, var(--accent-pink), var(--matcha));
+    border-radius: 0 0 15px 15px;
+    box-shadow: 0 4px 10px var(--soft-shadow);
+}
+
+.navbar .nav-link {
+    color: white !important;
+    font-weight: 500;
+}
+.navbar .nav-link:hover {
+    text-decoration: underline;
+}
+
+/* 📱 Responsive */
+@media (max-width: 768px) {
+    .container {
+        padding: 1rem;
+    }
+}
+
+/* 🍬 Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+::-webkit-scrollbar-thumb {
+    background-color: var(--accent-pink);
+    border-radius: 4px;
+}
