@@ -11,8 +11,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $example = sanitizeInput($_POST['example']);
     $status = $_POST['status'];
 
-    $stmt = $conn->prepare("INSERT INTO Vocabulary (user_id, word, meaning, example_sentence, status, added_date)
-                            VALUES (?, ?, ?, ?, ?, CURDATE())");
+    $stmt = $conn->prepare("CALL AddNewWord(?, ?, ?, ?, ?)");
     $stmt->bind_param("issss", $_SESSION['user_id'], $word, $meaning, $example, $status);
     $stmt->execute();
     $stmt->close();
