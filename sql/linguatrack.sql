@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Anamakine: 127.0.0.1
--- Üretim Zamanı: 12 Haz 2025, 23:43:40
+-- Üretim Zamanı: 13 Haz 2025, 02:46:43
 -- Sunucu sürümü: 10.4.32-MariaDB
 -- PHP Sürümü: 8.2.12
 
@@ -30,6 +30,11 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `AddGoal` (IN `p_user_id` INT, IN `p
     VALUES (p_user_id, p_description, p_start_date, p_end_date);
 END$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `AddNewWord` (IN `p_user_id` INT, IN `p_word` VARCHAR(100), IN `p_meaning` VARCHAR(100), IN `p_example` TEXT, IN `p_status` VARCHAR(50))   BEGIN
+    INSERT INTO Vocabulary (user_id, word, meaning, example_sentence, status, added_date)
+    VALUES (p_user_id, p_word, p_meaning, p_example, p_status, CURDATE());
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `AddStudyLog` (IN `p_user_id` INT, IN `p_duration_minutes` INT, IN `p_skill` ENUM('Kelime','Dilbilgisi','Okuma','Yazma','Dinleme','Konuşma'), IN `p_note` TEXT)   BEGIN
     INSERT INTO StudyLog (user_id, date, duration_minutes, skill, note)
     VALUES (p_user_id, CURDATE(), p_duration_minutes, p_skill, p_note);
@@ -40,9 +45,26 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `AddTestResult` (IN `p_user_id` INT,
     VALUES (p_user_id, p_test_type, CURDATE(), p_score, p_evaluation);
 END$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `AddUser` (IN `p_name` VARCHAR(100), IN `p_email` VARCHAR(100), IN `p_password` VARCHAR(100), IN `p_target_language` VARCHAR(50), IN `p_current_level` VARCHAR(10), IN `p_goal_level` VARCHAR(10), IN `p_registration_date` DATE)   BEGIN
+    INSERT INTO User (name, email, password, target_language, current_level, goal_level, registration_date)
+    VALUES (p_name, p_email, p_password, p_target_language, p_current_level, p_goal_level, p_registration_date);
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `AddVocabulary` (IN `p_user_id` INT, IN `p_word` VARCHAR(100), IN `p_meaning` VARCHAR(200), IN `p_example_sentence` TEXT)   BEGIN
     INSERT INTO Vocabulary (user_id, word, meaning, example_sentence, added_date)
     VALUES (p_user_id, p_word, p_meaning, p_example_sentence, CURDATE());
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `DeleteUser` (IN `p_user_id` INT)   BEGIN
+    DELETE FROM User WHERE user_id = p_user_id;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `DeleteVocabulary` (IN `p_vocab_id` INT)   BEGIN
+    DELETE FROM Vocabulary WHERE vocab_id = p_vocab_id;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `GetAllUsers` ()   BEGIN
+    SELECT * FROM User;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `GetUserStatistics` (IN `p_user_id` INT)   BEGIN
@@ -60,9 +82,27 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `GetUserStatistics` (IN `p_user_id` 
     WHERE u.user_id = p_user_id;
 END$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `GetVocabularyByUser` (IN `p_user_id` INT)   BEGIN
+    SELECT * FROM Vocabulary WHERE user_id = p_user_id;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `InsertStudyLog` (IN `p_user_id` INT, IN `p_date` DATE, IN `p_duration` INT, IN `p_notes` TEXT)   BEGIN
+    INSERT INTO StudyLog (user_id, date, duration_minutes, notes)
+    VALUES (p_user_id, p_date, p_duration, p_notes);
+
+    -- Toplam süre güncelle
+    UPDATE User
+    SET total_study_time = total_study_time + p_duration
+    WHERE user_id = p_user_id;
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `RegisterUser` (IN `p_name` VARCHAR(100), IN `p_email` VARCHAR(100), IN `p_password` VARCHAR(100), IN `p_target_language` VARCHAR(50), IN `p_current_level` VARCHAR(10), IN `p_goal_level` VARCHAR(10))   BEGIN
     INSERT INTO `User` (name, email, password, target_language, current_level, goal_level, registration_date)
     VALUES (p_name, p_email, p_password, p_target_language, p_current_level, p_goal_level, CURDATE());
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `UpdateUserEmail` (IN `p_user_id` INT, IN `p_new_email` VARCHAR(100))   BEGIN
+    UPDATE User SET email = p_new_email WHERE user_id = p_user_id;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `UpdateVocabularyStatus` (IN `p_vocab_id` INT, IN `p_status` ENUM('Öğreniliyor','Ezberlendi','Unutuldu'))   BEGIN
