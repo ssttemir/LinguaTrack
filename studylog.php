@@ -10,8 +10,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $skill = $_POST['skill'];
     $note = $_POST['note'];
 
-    $stmt = $conn->prepare("INSERT INTO StudyLog (user_id, duration_minutes, skill, note, date) VALUES (?, ?, ?, ?, CURDATE())");
-    $stmt->bind_param("iiss", $_SESSION['user_id'], $duration, $skill, $note);
+    $stmt = $conn->prepare("CALL InsertStudyLog(?, ?, ?, ?)");
+    $stmt->bind_param("isis", $_SESSION['user_id'], $date, $duration, $notes);
     $stmt->execute();
     $stmt->close();
     header("Location: studylog.php");
